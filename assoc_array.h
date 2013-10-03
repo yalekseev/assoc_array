@@ -60,25 +60,40 @@ public:
         m_vector.clear();
     }
 
-    iterator find(const key_type& key) {
-        auto it = std::lower_bound(m_vector.begin(), m_vector.end(), key, [](const value_type& v, const key_type& key) { return Compare()(v.first, key); });
-        if (it == m_vector.end()) {
-            return it;
+    const_iterator find(const key_type& key) const {
+        const_iterator it = std::lower_bound(
+                m_vector.begin(),
+                m_vector.end(),
+                key,
+                [](const value_type& v, const key_type& key) -> bool { return Compare()(v.first, key); });
+
+        if (it == m_vector.end() || it->first != key) {
+            return m_vector.end();
         }
 
-        if (it->first == key) {
-            return it;
-        }
-
-        return m_vector.end();
+        return it;
     }
 
-    iterator erase(const_iterator position) {
-        return m_vector.erase(position);
+    iterator find(const key_type& key) {
+        iterator it = std::lower_bound(
+                m_vector.begin(),
+                m_vector.end(),
+                key,
+                [](const value_type& v, const key_type& key) -> bool { return Compare()(v.first, key); });
+
+        if (it == m_vector.end() || it->first != key) {
+            return m_vector.end();
+        }
+
+        return it;
+    }
+
+    iterator erase(const_iterator it) {
+        return m_vector.erase(it);
     }
 
     size_type erase(const key_type& key) {
-        auto it = find(key);
+        const_iterator it = find(key);
         if (it != end()) {
             erase(it);
             return 1;
@@ -88,7 +103,12 @@ public:
     }
 
     std::pair<iterator, bool> insert(const value_type& value) {
-        auto it = std::lower_bound(m_vector.begin(), m_vector.end(), value, [](const value_type& left, const value_type& right) { return Compare()(left.first, right.first); });
+        iterator it = std::lower_bound(
+                m_vector.begin(),
+                m_vector.end(),
+                value,
+                [](const value_type& left, const value_type& right) -> bool { return Compare()(left.first, right.first); });
+
         if (it == m_vector.end() || it->first != value.first) {
             it = m_vector.insert(it, value);
             return std::pair<iterator, bool>(it, true);
@@ -97,18 +117,42 @@ public:
         return std::pair<iterator, bool>(it, false);
     }
 
+    size_type count(const key_type& key) const {
+        auto it = find(key);
+        if (it != end()) {
+            return 1;
+        }
+
+        return 0;
+    }
+
     T& operator[](const key_type& key) {
-        auto it = std::lower_bound(m_vector.begin(), m_vector.end(), key, [](const value_type& v, const key_type& key) { return Compare()(v.first, key); });
-        if (it == m_vector.end()) {
+        iterator it = std::lower_bound(
+                m_vector.begin(),
+                m_vector.end(),
+                key,
+                [](const value_type& v, const key_type& key) -> bool { return Compare()(v.first, key); });
+
+        // No value with this key, create a default one
+        if (it == m_vector.end() || it->first != key) {
             it = m_vector.insert(it, std::pair<Key, T>(key, T()));
-            return it->second;
         }
 
-        if (it->first == key) {
-            return it->second;
+        return it->second;
+    }
+
+    const T& operator[](const key_type& key) const {
+        const_iterator it = std::lower_bound(
+                m_vector.begin(),
+                m_vector.end(),
+                key,
+                [](const value_type& v, const key_type& key) -> bool { return Compare()(v.first, key); });
+
+        // No value with this key, create a default one
+        if (it == m_vector.end() || it->first != it) {
+            it = m_vector.insert(it, std::pair<Key, T>(key, T()));
         }
 
-        it = m_vector.insert(it, std::pair<Key, T>(key, T()));
         return it->second;
     }
 
