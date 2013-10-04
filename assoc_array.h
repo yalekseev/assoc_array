@@ -24,7 +24,7 @@ public:
     typedef const value_type& const_reference;
     typedef typename std::vector<std::pair<Key, T>, Allocator>::iterator iterator;
     typedef typename std::vector<std::pair<Key, T>, Allocator>::const_iterator const_iterator;
-    
+
     iterator begin() {
         return m_vector.begin();
     }
@@ -51,6 +51,15 @@ public:
 
     void clear() {
         m_vector.clear();
+    }
+
+    size_type count(const key_type& key) const {
+        auto it = find(key);
+        if (it != end()) {
+            return 1;
+        }
+
+        return 0;
     }
 
     bool empty() const {
@@ -120,15 +129,6 @@ public:
         }
 
         return std::pair<iterator, bool>(it, false);
-    }
-
-    size_type count(const key_type& key) const {
-        auto it = find(key);
-        if (it != end()) {
-            return 1;
-        }
-
-        return 0;
     }
 
     T& operator[](const key_type& key) {

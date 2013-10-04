@@ -23,6 +23,15 @@ void test_clear() {
     check_result(it == map.end(), "Test clear 2", std::cout);
 }
 
+void test_count() {
+    util::assoc_array<int, int> map;
+
+    check_result(map.count(1) == 0, "Test count 1", std::cout);
+
+    map[1] == 11;
+    check_result(map.count(1) == 1, "Test count 2", std::cout);
+}
+
 void test_empty() {
     util::assoc_array<int, int> map;
     check_result(map.empty(), "Test empty 1", std::cout);
@@ -105,6 +114,7 @@ void test_swap() {
 
 int main() {
     test_clear();
+    test_count();
     test_empty();
     test_max_size();
     test_size();
