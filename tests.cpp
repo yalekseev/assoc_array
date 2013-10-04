@@ -1,6 +1,7 @@
 #include "assoc_array.h"
 #include <iostream>
 #include <cassert>
+#include <limits>
 #include <string>
 
 void check_result(bool result, const std::string& test_name, std::ostream& os) {
@@ -31,6 +32,14 @@ void test_empty() {
 
     map.erase(1);
     check_result(map.empty(), "Test empty 3", std::cout);
+}
+
+void test_max_size() {
+    util::assoc_array<int, int> map;
+
+    check_result(
+        map.max_size() == std::numeric_limits<decltype(map)::size_type >::max(),
+        "Test max size", std::cout);
 }
 
 void test_size() {
@@ -97,6 +106,7 @@ void test_swap() {
 int main() {
     test_clear();
     test_empty();
+    test_max_size();
     test_size();
     test_swap();
 

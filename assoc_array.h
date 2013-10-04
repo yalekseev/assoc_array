@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <utility>
+#include <limits>
 #include <memory>
 #include <vector>
 
@@ -54,6 +55,10 @@ public:
 
     bool empty() const {
         return m_vector.empty();
+    }
+
+    size_type max_size() const {
+        return std::numeric_limits<size_type>::max();
     }
 
     size_type size() const {
