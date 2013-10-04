@@ -11,7 +11,7 @@ template <
     typename Key,
     typename T,
     typename Compare = std::less<Key>,
-    typename Allocator = std::allocator<std::pair<const Key, T> >
+    typename Allocator = std::allocator<std::pair<Key, T> >
 >
 class assoc_array {
 public:
@@ -88,12 +88,12 @@ public:
         return it;
     }
 
-    iterator erase(const_iterator it) {
+    iterator erase(iterator it) {
         return m_vector.erase(it);
     }
 
     size_type erase(const key_type& key) {
-        const_iterator it = find(key);
+        iterator it = find(key);
         if (it != end()) {
             erase(it);
             return 1;
@@ -154,6 +154,10 @@ public:
         }
 
         return it->second;
+    }
+
+    void swap(assoc_array& other) {
+        m_vector.swap(other.m_vector);
     }
 
 private:
