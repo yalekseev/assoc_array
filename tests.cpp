@@ -11,6 +11,28 @@ void check_result(bool result, const std::string& test_name, std::ostream& os) {
     }
 }
 
+void test_clear() {
+    util::assoc_array<int, int> map;
+
+    map[1] = 11;
+    map.clear();
+    check_result(map.empty(), "Test clear 1", std::cout);
+
+    auto it = map.find(1);
+    check_result(it == map.end(), "Test clear 2", std::cout);
+}
+
+void test_empty() {
+    util::assoc_array<int, int> map;
+    check_result(map.empty(), "Test empty 1", std::cout);
+
+    map[1] = 11;
+    check_result(!map.empty(), "Test empty 2", std::cout);
+
+    map.erase(1);
+    check_result(map.empty(), "Test empty 3", std::cout);
+}
+
 void test_size() {
     util::assoc_array<int, int> map;
     check_result(map.size() == 0, "Test size 1", std::cout);
@@ -28,17 +50,6 @@ void test_size() {
 
     map.erase(1);
     check_result(map.size() == 0, "Test size 5", std::cout);
-}
-
-void test_empty() {
-    util::assoc_array<int, int> map;
-    check_result(map.empty(), "Test empty 1", std::cout);
-
-    map[1] = 11;
-    check_result(!map.empty(), "Test empty 2", std::cout);
-
-    map.erase(1);
-    check_result(map.empty(), "Test empty 3", std::cout);
 }
 
 void test_swap() {
@@ -84,6 +95,7 @@ void test_swap() {
 }
 
 int main() {
+    test_clear();
     test_empty();
     test_size();
     test_swap();

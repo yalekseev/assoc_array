@@ -48,16 +48,16 @@ public:
         return m_vector.end();
     }
 
+    void clear() {
+        m_vector.clear();
+    }
+
     bool empty() const {
         return m_vector.empty();
     }
 
     size_type size() const {
         return m_vector.size();
-    }
-
-    void clear() {
-        m_vector.clear();
     }
 
     const_iterator find(const key_type& key) const {
