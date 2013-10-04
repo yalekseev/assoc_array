@@ -1,7 +1,7 @@
 assoc_array
 ===========
 
-Assosiative container based on vector
+Associative container based on vector
 
 Usage
 =====
