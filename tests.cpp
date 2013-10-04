@@ -43,6 +43,20 @@ void test_empty() {
     check_result(map.empty(), "Test empty 3", std::cout);
 }
 
+void test_find() {
+    util::assoc_array<int, int> map;
+
+    auto it = map.find(1);
+    check_result(it == map.end(), "Test find 1", std::cout);
+
+    map[1] = 11;
+    it = map.find(1);
+    check_result(it != map.end(), "Test find 2.1", std::cout);
+    if (it != map.end()) {
+        check_result(it->second == 11, "Test find 2.2", std::cout);
+    }
+}
+
 void test_max_size() {
     util::assoc_array<int, int> map;
 
@@ -116,6 +130,7 @@ int main() {
     test_clear();
     test_count();
     test_empty();
+    test_find();
     test_max_size();
     test_size();
     test_swap();
